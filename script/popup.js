@@ -24,6 +24,5 @@ function initTable() {
 			summaryRow += "<td>" + sum + "</td>";
 		}
 		table.innerHTML += summaryRow + "</tr>";
-		checkOldInTable();
 	});   
 }

@@ -19,7 +19,7 @@ function addItem(dataObj) {
 
 function getResourcePerHourRateSpan (rateValue) {
 	if (rateValue) {
-		return "<span style='color:green;'>+" + rateValue + "</span>";
+		return "<span style='color:green;float:right;'>+" + rateValue + "</span>";
 	} else {
 		return '';
 	}

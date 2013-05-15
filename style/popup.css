@@ -20,7 +20,8 @@ th {
 
 td {
 	background: #FEF5D5;
-	text-align: center;
+	text-align: left;
+	border-right: solid 2px;
 }
 
 div {
