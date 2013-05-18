@@ -25,6 +25,7 @@ function getAndSendResourceDataOnce () {
 	var sulfur = wipeCommas(document.getElementById('js_GlobalMenu_sulfur').innerText);
 
 	Resource = {}
+	Resource.type = "resources";
 	var currentTime = new Date();
 	currentTime = currentTime.getTime();
 	Resource.realm     = document.location.href.split('/')[2];
@@ -41,11 +42,6 @@ function getAndSendResourceDataOnce () {
 	Resource.marblePerHour = parseInt(document.getElementById('js_GlobalMenu_production_marble').innerText);
 	Resource.glassPerHour  = parseInt(document.getElementById('js_GlobalMenu_production_crystal').innerText);
 	Resource.sulfurPerHour = parseInt(document.getElementById('js_GlobalMenu_production_sulfur').innerText);
-
-	var wineConsumption = document.getElementById('warehouse_mastery_wine_consumption_' + cityName);
-	if (wineConsumption) {
-		Resource.winePerHour -= parseInt(wineConsumption.innerText);
-	}
 
 	chrome.extension.sendMessage(Resource);
 }
@@ -77,7 +73,17 @@ function injectInfoGatherer() {
 	document.getElementsByTagName('body')[0].appendChild(script);
 }
 
+function getAndSendWineConsumptionRate() {
+	WineConsumption = {}
+	WineConsumption.type = "wine_consumption";
+	WineConsumption.realm = document.location.href.split('/')[2];
+	WineConsumption.cityName = document.getElementById('js_cityBread').innerText;
+	WineConsumption.rate = document.getElementById('warehouse_mastery_wine_consumption_' + WineConsumption.cityName).innerText * -1;
+	chrome.extension.sendMessage(WineConsumption);
+}
+
 injectInfoGatherer();
+getAndSendWineConsumptionRate();
 checkAndUpdate();
 getAndSendResourceDataContinuously();
 

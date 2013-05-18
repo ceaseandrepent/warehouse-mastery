@@ -6,8 +6,8 @@
 chrome.tabs.onUpdated.addListener(checkForValidUrl);
 
 
-var RESOURCES = [];
-function addItem(dataObj) {
+var RESOURCES = [], WINE_CONSUMPTION = {};
+function addResourcesEntry(dataObj) {
 	for (var i = 0; i < RESOURCES.length; i++) {
 		if (RESOURCES[i].realm == dataObj.realm && RESOURCES[i].city == dataObj.city) {
 			RESOURCES[i] = dataObj;
@@ -15,6 +15,13 @@ function addItem(dataObj) {
 		}
 	}
 	RESOURCES[RESOURCES.length] = dataObj;
+}
+
+function addWineConsumptionEntry(dataObj) {
+	if (!WINE_CONSUMPTION[dataObj.realm]) {
+		WINE_CONSUMPTION[dataObj.realm] = {};
+	}
+	WINE_CONSUMPTION[dataObj.realm][dataObj.cityName] = dataObj.rate;
 }
 
 function getResourcePerHourRateSpan (rateValue) {
@@ -34,18 +41,23 @@ function updateLocalTable(tableId) {
 		container.setAttribute('id', tableId);
 		document.getElementsByTagName('body')[0].appendChild(container);
 	}
-	var tableContent = "";
+	var tableContent = "", currStr = "", currWineConsumption = "";
 	for (var i = 0; i < RESOURCES.length; i++) {
 		if (RESOURCES[i].realm != tableId) {
 			continue;
 		}
-		var currStr = "<tr><td class='side-header'>" + RESOURCES[i].city 
-		            + "</td><td>" + Math.floor(RESOURCES[i].wood)   + getResourcePerHourRateSpan(RESOURCES[i].woodPerHour)
-		            + "</td><td>" + Math.floor(RESOURCES[i].wine)   + getResourcePerHourRateSpan(RESOURCES[i].winePerHour)
-		            + "</td><td>" + Math.floor(RESOURCES[i].marble) + getResourcePerHourRateSpan(RESOURCES[i].marblePerHour)
-		            + "</td><td>" + Math.floor(RESOURCES[i].glass)  + getResourcePerHourRateSpan(RESOURCES[i].glassPerHour)
-		            + "</td><td>" + Math.floor(RESOURCES[i].sulfur) + getResourcePerHourRateSpan(RESOURCES[i].sulfurPerHour)
-		            + "</td></tr>";
+		if (WINE_CONSUMPTION[tableId][RESOURCES[i].city]) {
+			currWineConsumption = getResourcePerHourRateSpan(WINE_CONSUMPTION[tableId][RESOURCES[i].city]);
+		} else {
+			currWineConsumption = '';
+		}
+		currStr = "<tr><td class='side-header'>" + RESOURCES[i].city 
+		        + "</td><td>" + Math.floor(RESOURCES[i].wood)   + getResourcePerHourRateSpan(RESOURCES[i].woodPerHour)
+		        + "</td><td>" + Math.floor(RESOURCES[i].wine)   + currWineConsumption + getResourcePerHourRateSpan(RESOURCES[i].winePerHour)
+		        + "</td><td>" + Math.floor(RESOURCES[i].marble) + getResourcePerHourRateSpan(RESOURCES[i].marblePerHour)
+		        + "</td><td>" + Math.floor(RESOURCES[i].glass)  + getResourcePerHourRateSpan(RESOURCES[i].glassPerHour)
+		        + "</td><td>" + Math.floor(RESOURCES[i].sulfur) + getResourcePerHourRateSpan(RESOURCES[i].sulfurPerHour)
+		        + "</td></tr>";
 		tableContent += currStr;
 	}
 	container.innerHTML = tableContent;
@@ -54,8 +66,19 @@ function updateLocalTable(tableId) {
 chrome.extension.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		//sender.tab.url - адрес вида "http://s13.ru.ikariam.com/index.php?"
-		addItem(request);
-		updateLocalTable(request.realm);
+		switch (request.type) {
+			case "resources":
+				addResourcesEntry(request);
+				updateLocalTable(request.realm);
+				break;
+
+			case "wine_consumption":
+				addWineConsumptionEntry(request);
+				break;
+
+			default:
+				break;
+		}
 	}
 );
 
