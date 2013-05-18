@@ -18,8 +18,10 @@ function addItem(dataObj) {
 }
 
 function getResourcePerHourRateSpan (rateValue) {
-	if (rateValue) {
+	if (rateValue > 0) {
 		return "<span style='color:green;float:right;'>+" + rateValue + "</span>";
+	} else if (rateValue < 0) {
+		return "<span style='color:red;float:right;'>" + rateValue + "</span>";
 	} else {
 		return '';
 	}
@@ -78,7 +80,6 @@ function updateResources () {
 			updateLocalTable(RESOURCES[i].realm);
 			updatedRealms[RESOURCES[i].realm] = 1;
 		}
-
 	}
 
 	setTimeout(function() { updateResources(); }, 29000);

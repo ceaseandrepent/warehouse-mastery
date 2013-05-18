@@ -24,7 +24,6 @@ function getAndSendResourceDataOnce () {
 	var glass  = wipeCommas(document.getElementById('js_GlobalMenu_crystal').innerText);
 	var sulfur = wipeCommas(document.getElementById('js_GlobalMenu_sulfur').innerText);
 
-
 	Resource = {}
 	var currentTime = new Date();
 	currentTime = currentTime.getTime();
@@ -42,6 +41,11 @@ function getAndSendResourceDataOnce () {
 	Resource.marblePerHour = parseInt(document.getElementById('js_GlobalMenu_production_marble').innerText);
 	Resource.glassPerHour  = parseInt(document.getElementById('js_GlobalMenu_production_crystal').innerText);
 	Resource.sulfurPerHour = parseInt(document.getElementById('js_GlobalMenu_production_sulfur').innerText);
+
+	var wineConsumption = document.getElementById('warehouse_mastery_wine_consumption_' + cityName);
+	if (wineConsumption) {
+		Resource.winePerHour -= parseInt(wineConsumption.innerText);
+	}
 
 	chrome.extension.sendMessage(Resource);
 }
@@ -66,5 +70,32 @@ function checkAndUpdate() {
 	setTimeout(function() { checkAndUpdate(); }, 900);
 }
 
+function injectInfoGatherer() {
+	var script = document.createElement('script');
+	script.setAttribute('type', 'text/javascript');
+	script.innerText = "(function() { function updateWineConsumption() { var containerId = 'warehouse_mastery_wine_consumption_' + dataSetForView.relatedCityData[dataSetForView.relatedCityData.selectedCity].name; var container = document.getElementById(containerId); if (!container) { container = document.createElement('div'); container.setAttribute('id', containerId); container.setAttribute('style', 'display:none;'); document.getElementsByTagName('body')[0].appendChild(container); } container.innerHTML = dataSetForView.wineSpendings; } updateWineConsumption(); }());";
+	document.getElementsByTagName('body')[0].appendChild(script);
+}
+
+injectInfoGatherer();
 checkAndUpdate();
 getAndSendResourceDataContinuously();
+
+/*
+(function() {
+	function updateWineConsumption() {
+		var containerId = 'warehouse_mastery_wine_consumption_'
+		                + dataSetForView.relatedCityData[dataSetForView.relatedCityData.selectedCity].name;
+		var container = document.getElementById(containerId);
+		if (!container) {
+			container = document.createElement('div');
+			container.setAttribute('id', containerId);
+			container.setAttribute('style', 'display:none;');
+			document.getElementsByTagName('body')[0].appendChild(container);
+		}
+		container.innerHTML = dataSetForView.wineSpendings;
+	}
+
+	updateWineConsumption();
+}());
+*/
