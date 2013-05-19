@@ -8,7 +8,7 @@ function initTable() {
 		var bgPage = chrome.extension.getBackgroundPage();
 		var table = document.getElementById('table');
 
-		var tableHeader = "<tr><th></th><th title='wood'><img src='imgs/icon_wood.png'></th><th title='wine'><img src='imgs/icon_wine.png'></th><th title='marble'><img src='imgs/icon_marble.png'></th><th title='glass'><img src='imgs/icon_glass.png'></th><th title='sulfur'><img src='imgs/icon_sulfur.png'></th></tr>";
+		var tableHeader = "<tr><th class='side-header'></th><th title='wood'><img src='imgs/icon_wood.png'></th><th title='wine'><img src='imgs/icon_wine.png'></th><th title='marble'><img src='imgs/icon_marble.png'></th><th title='glass'><img src='imgs/icon_glass.png'></th><th title='sulfur'><img src='imgs/icon_sulfur.png'></th></tr>";
 		var tableRows = bgPage.document.getElementById(realm).innerHTML;
 		
 		var tableContent = tableHeader + tableRows;

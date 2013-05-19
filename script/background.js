@@ -51,7 +51,7 @@ function updateLocalTable(tableId) {
 		} else {
 			currWineConsumption = '';
 		}
-		currStr = "<tr><td class='side-header'>" + RESOURCES[i].city 
+		currStr = "<tr><td>" + RESOURCES[i].city 
 		        + "</td><td>" + Math.floor(RESOURCES[i].wood)   + getResourcePerHourRateSpan(RESOURCES[i].woodPerHour)
 		        + "</td><td>" + Math.floor(RESOURCES[i].wine)   + currWineConsumption + getResourcePerHourRateSpan(RESOURCES[i].winePerHour)
 		        + "</td><td>" + Math.floor(RESOURCES[i].marble) + getResourcePerHourRateSpan(RESOURCES[i].marblePerHour)
