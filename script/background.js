@@ -78,6 +78,7 @@ function updateLocalTable(tableId) {
 		        + "</td><td>" + Math.floor(RESOURCES[i].marble) + getResourcePerHourRateSpan(RESOURCES[i].marblePerHour)
 		        + "</td><td>" + Math.floor(RESOURCES[i].glass)  + getResourcePerHourRateSpan(RESOURCES[i].glassPerHour)
 		        + "</td><td>" + Math.floor(RESOURCES[i].sulfur) + getResourcePerHourRateSpan(RESOURCES[i].sulfurPerHour)
+		        + "</td><td>" + RESOURCES[i].savedFromRobbery
 		        + "</td></tr>";
 		tableContent += currStr;
 	}

@@ -12,6 +12,12 @@ function wipeCommas(str) {
 }
 
 function getAndSendResourceDataOnce() {
+	var warehouses = document.getElementsByClassName('warehouse');
+	var savedFromRobberyResourcesAmount = 100;
+	for (var i = 0; i < warehouses.length; i++) {
+		savedFromRobberyResourcesAmount += parseInt(warehouses[i].className[warehouses[i].className.length - 1]) * 480;
+	}
+
 	var currentTime = new Date();
 
 	Resource = {}
@@ -30,6 +36,8 @@ function getAndSendResourceDataOnce() {
 	Resource.marblePerHour = parseInt(document.getElementById('js_GlobalMenu_production_marble').innerText);
 	Resource.glassPerHour  = parseInt(document.getElementById('js_GlobalMenu_production_crystal').innerText);
 	Resource.sulfurPerHour = parseInt(document.getElementById('js_GlobalMenu_production_sulfur').innerText);
+
+	Resource.savedFromRobbery = savedFromRobberyResourcesAmount;
 
 	chrome.extension.sendMessage(Resource);
 }

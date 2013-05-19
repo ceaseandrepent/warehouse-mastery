@@ -6,16 +6,16 @@ body {
 
 table {
 	-webkit-box-shadow: 0 0 15px rgba(0,0,0,0.5);
-	width: 600px;
+	width: 700px;
 }
 
 th.side-header {
-	width: 29%;
+	width: 20%;
 }
 
 th {
 	background: -webkit-linear-gradient(top, #f0b7a1 0%,#aa5333 50%,#752201 51%,#bf6e4e 100%); /* Chrome10+,Safari5.1+ */
-	width: 14%;
+	width: 13%;
 }
 
 td {
