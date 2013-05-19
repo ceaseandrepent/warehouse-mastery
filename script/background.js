@@ -1,12 +1,42 @@
-﻿function checkForValidUrl(tabId, changeInfo, tab) {
+﻿function getResourcePerHourRateSpan (rateValue) {
+	if (rateValue > 0) {
+		return "<span style='color:green;float:right;'>+" + rateValue + "</span>";
+	} else if (rateValue < 0) {
+		return "<span style='color:red;float:right;'>" + rateValue + "</span>";
+	} else {
+		return '';
+	}
+}
+
+function checkForValidUrl(tabId, changeInfo, tab) {
 	if (tab.url.indexOf('.ikariam.com') > -1) {
 		chrome.pageAction.show(tabId);
 	}
 }
-chrome.tabs.onUpdated.addListener(checkForValidUrl);
-
 
 var RESOURCES = [], WINE_CONSUMPTION = {};
+chrome.tabs.onUpdated.addListener(checkForValidUrl);
+setTimeout(function() { updateResourcesContinuously(29000); }, 29000);
+
+chrome.extension.onMessage.addListener(
+	function(request, sender, sendResponse) {
+		//sender.tab.url - адрес вида "http://s13.ru.ikariam.com/index.php?"
+		switch (request.type) {
+			case "resources":
+				addResourcesEntry(request);
+				updateLocalTable(request.realm);
+				break;
+
+			case "wine_consumption":
+				addWineConsumptionEntry(request);
+				break;
+
+			default:
+				break;
+		}
+	}
+);
+
 function addResourcesEntry(dataObj) {
 	for (var i = 0; i < RESOURCES.length; i++) {
 		if (RESOURCES[i].realm == dataObj.realm && RESOURCES[i].city == dataObj.city) {
@@ -24,16 +54,6 @@ function addWineConsumptionEntry(dataObj) {
 	WINE_CONSUMPTION[dataObj.realm][dataObj.cityName] = dataObj.rate;
 }
 
-function getResourcePerHourRateSpan (rateValue) {
-	if (rateValue > 0) {
-		return "<span style='color:green;float:right;'>+" + rateValue + "</span>";
-	} else if (rateValue < 0) {
-		return "<span style='color:red;float:right;'>" + rateValue + "</span>";
-	} else {
-		return '';
-	}
-}
-
 function updateLocalTable(tableId) {
 	var container = document.getElementById(tableId);
 	if (!container) {
@@ -41,6 +61,7 @@ function updateLocalTable(tableId) {
 		container.setAttribute('id', tableId);
 		document.getElementsByTagName('body')[0].appendChild(container);
 	}
+
 	var tableContent = "", currStr = "", currWineConsumption = "";
 	for (var i = 0; i < RESOURCES.length; i++) {
 		if (RESOURCES[i].realm != tableId) {
@@ -63,26 +84,7 @@ function updateLocalTable(tableId) {
 	container.innerHTML = tableContent;
 }
 
-chrome.extension.onMessage.addListener(
-	function(request, sender, sendResponse) {
-		//sender.tab.url - адрес вида "http://s13.ru.ikariam.com/index.php?"
-		switch (request.type) {
-			case "resources":
-				addResourcesEntry(request);
-				updateLocalTable(request.realm);
-				break;
-
-			case "wine_consumption":
-				addWineConsumptionEntry(request);
-				break;
-
-			default:
-				break;
-		}
-	}
-);
-
-function updateResources () {
+function updateResourcesContinuously(msInterval) {
 	var currentTime = new Date();
 	currentTime = currentTime.getTime();
 
@@ -105,7 +107,5 @@ function updateResources () {
 		}
 	}
 
-	setTimeout(function() { updateResources(); }, 29000);
+	setTimeout(function() { updateResourcesContinuously(msInterval); }, msInterval);
 }
-
-setTimeout(function() { updateResources(); }, 29000);
