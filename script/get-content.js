@@ -15,7 +15,7 @@ function getAndSendResourceDataOnce() {
 	var warehouses = document.getElementsByClassName('warehouse');
 	var savedFromRobberyResourcesAmount = 100;
 	for (var i = 0; i < warehouses.length; i++) {
-		savedFromRobberyResourcesAmount += parseInt(warehouses[i].className[warehouses[i].className.length - 1]) * 480;
+		savedFromRobberyResourcesAmount += parseInt(warehouses[i].className.match(/[0-9]+$/)[0]) * 480;
 	}
 
 	var currentTime = new Date();
