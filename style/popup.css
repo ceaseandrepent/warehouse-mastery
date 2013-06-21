@@ -5,23 +5,18 @@ body {
 }
 
 table {
-	-webkit-box-shadow: 0 0 15px rgba(0,0,0,0.5);
-	width: 700px;
-}
-
-th.side-header {
-	width: 20%;
+	box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
 
 th {
 	background: -webkit-linear-gradient(top, #f0b7a1 0%,#aa5333 50%,#752201 51%,#bf6e4e 100%); /* Chrome10+,Safari5.1+ */
-	width: 13%;
 }
 
 td {
 	background: #FEF5D5;
-	text-align: left;
 	border-right: solid 2px;
+	text-align: left;
+	white-space: nowrap;
 }
 
 div {
