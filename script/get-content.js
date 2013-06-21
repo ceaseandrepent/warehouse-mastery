@@ -12,6 +12,11 @@ function wipeCommas(str) {
 }
 
 function getAndSendResourceDataOnce() {
+	// check: is current city belongs to player or it is "deployed"?
+	if (document.getElementById('resources_foreign').classList[0] == "deployedCities") {
+		return;
+	}
+
 	var warehouses = document.getElementsByClassName('warehouse');
 	var savedFromRobberyResourcesAmount = 100;
 	for (var i = 0; i < warehouses.length; i++) {
