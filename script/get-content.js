@@ -12,8 +12,9 @@ function wipeCommas(str) {
 }
 
 function getAndSendResourceDataOnce() {
-	// check: is current city belongs to player or it is "deployed"?
-	if (document.getElementById('resources_foreign').classList[0] == "deployedCities") {
+	// check: is current city belongs to player or it is "deployed" (occupied)?
+	var tmp = document.getElementById('resources_foreign').classList[0];
+	if (tmp == "deployedCities" || tmp == "occupiedCities") {
 		return;
 	}
 
