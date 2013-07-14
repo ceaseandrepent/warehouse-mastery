@@ -14,9 +14,10 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 	}
 }
 
-var RESOURCES = [], WINE_CONSUMPTION = {};
+var RESOURCES = [], WINE_CONSUMPTION = {}, LAST_WINE_AMOUNT_UPDATE = 0;
 chrome.tabs.onUpdated.addListener(checkForValidUrl);
 setTimeout(function() { updateResourcesContinuously(29000); }, 29000);
+setTimeout(function() { updateWineContinuously(113000); }, 113000);
 
 chrome.extension.onMessage.addListener(
 	function(request, sender, sendResponse) {
@@ -109,4 +110,17 @@ function updateResourcesContinuously(msInterval) {
 	}
 
 	setTimeout(function() { updateResourcesContinuously(msInterval); }, msInterval);
+}
+
+function updateWineContinuously(msInterval) {
+	var currentMinutes = new Date();
+	currentMinutes = currentMinutes.getMinutes();
+	if (currentMinutes - LAST_WINE_AMOUNT_UPDATE < 0) {
+		for (var i = 0; i < RESOURCES.length; i++) {
+			RESOURCES[i].wine += WINE_CONSUMPTION[RESOURCES[i].realm][RESOURCES[i].city];
+		}
+	}
+
+	LAST_WINE_AMOUNT_UPDATE = currentMinutes;
+	setTimeout(function() { updateWineContinuously(msInterval); }, msInterval);
 }
