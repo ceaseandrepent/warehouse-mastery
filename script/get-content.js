@@ -50,6 +50,9 @@ function getAndSendResourceDataOnce() {
 
 var CITY_INFO_AT_PREVIOUS_CHECK = '';
 function checkAndUpdateContinuously(msInterval) {
+	if (!document.getElementById('js_cityBread')) {
+		return;
+	}
 	var cityInfo = document.getElementById('js_cityBread').innerText
 	             + document.getElementById('js_GlobalMenu_wood').innerText
 	             + document.getElementById('js_GlobalMenu_wine').innerText
@@ -76,6 +79,9 @@ function injectInfoGatherer() {
 }
 
 function getAndSendWineConsumptionRate() {
+	if (!document.getElementById('js_cityBread')) {
+		return;
+	}
 	WineConsumption = {}
 	WineConsumption.type = "wine_consumption";
 	WineConsumption.realm = document.location.href.split('/')[2];

@@ -1,6 +1,6 @@
 {
   "name": "warehouse-mastery",
-  "version": "3.1",
+  "version": "3.2",
   "manifest_version": 2,
   "description": "Gathers information about resources' quantity in user's towns into table.",
   "update_url": "https://github.com/ceaseandrepent/warehouse-mastery/raw/master/packed/update.xml",
